@@ -34,11 +34,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - name: Run tests
-        run: ./gradlew allTests -x iosX64Test
+        run: ./gradlew allTests
+      - name: List reports
+        run: ls -la shared/build/kotest-reports
       - name: Test Report
         uses: dorny/test-reporter@v1
         if: success() || failure()
         with:
           name: All Tests
-          path: shared/build/kotest-reports/**/*.xml
+          path: shared/build/kotest-reports/*.xml
           reporter: java-junit
