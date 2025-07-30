@@ -1,0 +1,22 @@
+[versions]
+agp = "8.7.3"
+android-compileSdk = "35"
+android-minSdk = "24"
+android-targetSdk = "35"
+kotlin = "2.2.0"
+kotlinx-coroutines = "1.10.2"
+kotest = "6.0.0.M8"
+ksp = "2.2.0-2.0.2"
+kxio = "0.8.0"
+
+[libraries]
+kotest-framework = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
+kotest-assert = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-reporter = { module = "io.kotest:kotest-framework-multiplatform-reporter", version.ref = "kotest" }
+kxio = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kxio" }
+
+[plugins]
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotest = { id = "io.kotest", version.ref = "kotest" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
