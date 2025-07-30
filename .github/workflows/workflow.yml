@@ -16,12 +16,12 @@ jobs:
       - name: Run tests
         run: ./gradlew allTests
       - name: List reports
-        run: ls -laR shared/build/test-results
+        run: ls -la shared/build/test-results/bolted-on
       - name: Test Report
         uses: dorny/test-reporter@v2
         if: success() || failure()
         with:
           name: All Tests
-          path:  shared/build/test-results/**/TEST*.xml/*.xml
+          path: shared/build/test-results/**/TEST*.xml
           reporter: java-junit
           use-actions-summary: true
