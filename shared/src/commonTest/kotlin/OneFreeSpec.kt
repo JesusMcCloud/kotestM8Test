@@ -4,10 +4,10 @@ import io.kotest.matchers.shouldNotBe
 
 class OneFreeSpec: FreeSpec( {
 
-    "Yay" {
+    "Free Yay" {
         "A" shouldBe "A"
     }
-    "Nay" {
+    "Free Nay" {
         "A" shouldNotBe "A"
     }
 

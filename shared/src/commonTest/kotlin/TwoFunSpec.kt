@@ -4,11 +4,10 @@ import io.kotest.matchers.shouldNotBe
 
 class TwoFunSpec : FunSpec({
 
-    test("Yay with fun") {
+    test("Yay with Fun") {
         "A" shouldBe "A"
     }
-    test("Nay with fun") {
+    test("Nay with Fun") {
         "A" shouldNotBe "A"
     }
-
 })

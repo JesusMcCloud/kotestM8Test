@@ -48,7 +48,7 @@ object Reporter : AfterTestListener, AfterProjectListener, AfterSpecListener {
             val sink = SystemFileSystem.sink(
                 Path(
                     path,
-                    Random.nextBytes(4).toHexString() + "-${spec::class.simpleName}.xml"
+                    Random.nextBytes(4).toHexString() + "-TEST-${spec::class.simpleName}.xml"
                 ), append = false
             ).buffered()
             sink.writeString(xml)

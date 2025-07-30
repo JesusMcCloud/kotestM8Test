@@ -44,9 +44,14 @@ kotlin {
     linuxArm64()
     mingwX64()
 
-    jvm()
+    jvm {
+        testRuns["test"].executionTask.configure {
+            useJUnitPlatform()
+        }
+    }
 
-    //wasmWasi() { nodesJs() }
+    //stile borked with M8
+    //wasmWasi { nodejs() }
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
@@ -64,6 +69,7 @@ kotlin {
                 }
             }
         }
+        nodejs()
     }
 
     sourceSets {
@@ -76,17 +82,19 @@ kotlin {
             implementation(libs.kotest.reporter)
             implementation(libs.kxio)
         }
+        jvmTest.dependencies {
+            implementation(libs.kotest.junit)
+        }
     }
 }
 
-val f = project.layout.buildDirectory.dir("kotest-reports").get().asFile.apply { mkdirs() }
+val f = project.layout.buildDirectory.dir("test-results").get().dir("bolted-on").asFile.apply { mkdirs() }
 f.listFiles().forEach { it.delete() }
 val file = File("${project.layout.projectDirectory}/src/commonTest/kotlin/tempdir.kt")
 if (file.exists()) {
     file.delete()
 }
 file.createNewFile()
-//file.deleteOnExit()
 file.writer().use {
     it.write("val tempPath = \"${f.absolutePath}\"")
 }

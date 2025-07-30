@@ -11,6 +11,7 @@ kxio = "0.8.0"
 
 [libraries]
 kotest-framework = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
+kotest-junit = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
 kotest-assert = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-reporter = { module = "io.kotest:kotest-framework-multiplatform-reporter", version.ref = "kotest" }
 kxio = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kxio" }
