@@ -1,4 +1,4 @@
-name: Test Everything
+name: Test Everything on macOS
 on:
   workflow_dispatch:
 jobs:
@@ -18,9 +18,10 @@ jobs:
       - name: List reports
         run: ls -la shared/build/kotest-reports
       - name: Test Report
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v2
         if: success() || failure()
         with:
           name: All Tests
           path: shared/build/kotest-reports/*.xml
           reporter: java-junit
+          use-actions-summary: true
