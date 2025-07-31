@@ -10,29 +10,6 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
-
-project.configurations.whenObjectAdded {
-    if (name.startsWith("ksp") && name.endsWith("Test")) {
-        val target = name.substring(3, name.length - 4).replaceFirstChar { it.lowercase() }
-        val isJvm = name.lowercase().contains("jvm")
-
-        project.logger.lifecycle("  >>[${project.name}] Adding Kotest symbol processor dependency to $name")
-        if (!isJvm) project.dependencies.add(
-            name,
-            "io.kotest:kotest-framework-symbol-processor-jvm:${libs.versions.kotest.get()}"
-        )
-
-    }
-}
-
-project.afterEvaluate {
-    tasks.configureEach {
-        if (name == "kspTestKotlinJvm" || name == "kspDebugUnitTestKotlinAndroid" || name =="kspReleaseUnitTestKotlinAndroid") {
-            enabled = false
-        }
-    }
-}
-
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
