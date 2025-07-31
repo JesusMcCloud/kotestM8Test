@@ -1,13 +1,16 @@
-import io.kotest.core.spec.style.FunSpec
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 
-class TwoFunSpec : FunSpec({
+class TwoFunSpec {
 
-    test("Yay with Fun") {
-        "A" shouldBe "A"
+    @Test
+    fun `Yay with Fun`() {
+        assertEquals("A", "A")
     }
-    test("Nay with Fun") {
-        "A" shouldNotBe "A"
+
+    @Test
+    fun `Nay with Fun`() {
+        assertNotEquals("A", "A")
     }
-})
+}

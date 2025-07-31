@@ -6,31 +6,6 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.kotest)
-    alias(libs.plugins.ksp)
-}
-
-
-project.configurations.whenObjectAdded {
-    if (name.startsWith("ksp") && name.endsWith("Test")) {
-        val target = name.substring(3, name.length - 4).replaceFirstChar { it.lowercase() }
-        val isJvm = name.lowercase().contains("jvm")
-
-        project.logger.lifecycle("  >>[${project.name}] Adding Kotest symbol processor dependency to $name")
-        if (!isJvm) project.dependencies.add(
-            name,
-            "io.kotest:kotest-framework-symbol-processor-jvm:${libs.versions.kotest.get()}"
-        )
-
-    }
-}
-
-project.afterEvaluate {
-    tasks.configureEach {
-        if (name == "kspTestKotlinJvm" || name == "kspDebugUnitTestKotlinAndroid" || name =="kspReleaseUnitTestKotlinAndroid") {
-            enabled = false
-        }
-    }
 }
 
 kotlin {
@@ -79,7 +54,7 @@ kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser {
-            testTask { useKarma { useChromeHeadless() } }
+            testTask { useKarma { useChromiumHeadless() } }
             val rootDirPath = project.rootDir.path
             val projectDirPath = project.projectDir.path
             commonWebpackConfig {
@@ -100,34 +75,11 @@ kotlin {
             // put your Multiplatform dependencies here
         }
         commonTest.dependencies {
-            implementation(libs.kotest.framework)
-            implementation(libs.kotest.assert)
-            implementation(libs.kotest.reporter)
-            implementation(libs.kxio)
+            implementation(libs.kotlin.test)
         }
-        jvmTest.dependencies {
-            implementation(libs.kotest.junit)
-        }
+
     }
 }
-
-val f = project.layout.buildDirectory.dir("test-results").get().dir("bolted-on").asFile.apply { mkdirs() }
-f.listFiles().forEach { it.delete() }
-val file = File("${project.layout.projectDirectory}/src/commonTest/kotlin/tempdir.kt")
-if (file.exists()) {
-    file.delete()
-}
-file.createNewFile()
-file.writer().use {
-    it.write("val tempPath = \"${f.absolutePath}\"")
-}
-
-gradle.taskGraph.whenReady {
-    allTasks.forEach { task ->
-        task.finalizedBy("finalTask")
-    }
-}
-
 
 android {
     namespace = "io.kotest.test.shared"

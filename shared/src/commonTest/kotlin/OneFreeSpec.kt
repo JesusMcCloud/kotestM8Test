@@ -1,14 +1,15 @@
-import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 
-class OneFreeSpec: FreeSpec( {
-
-    "Free Yay" {
-        "A" shouldBe "A"
-    }
-    "Free Nay" {
-        "A" shouldNotBe "A"
+class OneFreeSpec {
+    @Test
+    fun `Free Yay`() {
+        assertEquals("A", "A")
     }
 
-})
+    @Test
+    fun `Free Nay`() {
+        assertNotEquals("A", "A")
+    }
+}
