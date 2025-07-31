@@ -112,11 +112,9 @@ kotlin {
 }
 
 val f = project.layout.buildDirectory.dir("test-results").get().dir("bolted-on").asFile.apply { mkdirs() }
-f.listFiles().forEach { it.delete() }
+
 val file = File("${project.layout.projectDirectory}/src/commonTest/kotlin/tempdir.kt")
-if (file.exists()) {
-    file.delete()
-}
+
 file.createNewFile()
 file.writer().use {
     it.write("val tempPath = \"${f.absolutePath}\"")
