@@ -55,6 +55,11 @@ jobs:
       - name: Run tests
         run: ./gradlew iosX64Test
         continue-on-error: true
+      - name: Run tests
+        run: ./gradlew jvmTest
+        continue-on-error: true
+      - name: Run tests
+        run: ./gradlew allTests
       - name: List reports
         run: ls -la shared/build/test-results/bolted-on
         if: success() || failure()

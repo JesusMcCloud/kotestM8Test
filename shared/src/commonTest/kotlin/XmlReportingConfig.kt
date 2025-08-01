@@ -50,7 +50,7 @@ object Reporter : AfterTestListener, AfterProjectListener, AfterSpecListener {
                 val sink = SystemFileSystem.sink(
                     Path(
                         path,
-                        "${platform.name}-TEST-" + Random.nextBytes(4).toHexString() + "-${spec::class.simpleName}.xml"
+                        "TEST-${platform.name}-" + Random.nextBytes(4).toHexString() + "-${spec::class.simpleName}.xml"
                     ), append = false
                 ).buffered()
                 sink.writeString(xml)
