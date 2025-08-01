@@ -1,15 +1,13 @@
-import kotlin.test.Test
+import de.infix.testBalloon.framework.testSuite
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-class OneFreeSpec {
-    @Test
-    fun `Free Yay`() {
+val OneFreeSpec by testSuite {
+    test("Free Yay") {
         assertEquals("A", "A")
     }
 
-    @Test
-    fun `Free Nay`() {
+    test("Free Nay") {
         assertNotEquals("A", "A")
     }
 }

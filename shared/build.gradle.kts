@@ -6,6 +6,28 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.testballoon)
+    alias(libs.plugins.serialization)
+
+}
+val f = File(System.getProperty("java.io.tmpdir") + "/test-results").apply { mkdirs() }
+
+val file = File("${project.layout.projectDirectory}/src/commonTest/kotlin/tempdir.kt")
+
+tasks.matching {  it.name.lowercase().endsWith("test") }.forEach {
+    it.doLast {
+        runCatching {
+            logger.lifecycle("  >> Copying tests from ${f.absolutePath}")
+            f.copyRecursively(layout.buildDirectory.asFile.get(), overwrite = true)
+        }.getOrElse {
+            project.logger.warn(" >> Copying tests from ${f.absolutePath} failed: ${it.message}")
+        }
+    }
+}
+
+file.createNewFile()
+file.writer().use {
+    it.write("val tempPath = \"${f.absolutePath}\"")
 }
 
 kotlin {
@@ -42,19 +64,14 @@ kotlin {
     linuxArm64()
     mingwX64()
 
-    jvm {
-        testRuns["test"].executionTask.configure {
-            useJUnitPlatform()
-        }
-    }
+    jvm()
 
-    //stile borked with M8
-    //wasmWasi { nodejs() }
+    wasmWasi { nodejs() }
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser {
-            testTask { useKarma { useChromeHeadless() } }
+            testTask { useKarma { useChromiumHeadless() } }
             val rootDirPath = project.rootDir.path
             val projectDirPath = project.projectDir.path
             commonWebpackConfig {
@@ -72,14 +89,24 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+
+
             // put your Multiplatform dependencies here
         }
         commonTest.dependencies {
+            implementation(libs.testballoon)
             implementation(libs.kotlin.test)
+            implementation(libs.kxio)
+            implementation(libs.kotlin.coroutines)
+            implementation(libs.xmlutil)
+            implementation(libs.atomicfu)
         }
 
     }
 }
+
+
+
 
 android {
     namespace = "io.kotest.test.shared"

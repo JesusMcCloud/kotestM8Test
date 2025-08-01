@@ -1,16 +1,14 @@
-import kotlin.test.Test
+import de.infix.testBalloon.framework.testSuite
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-class TwoFunSpec {
+val TwoFunSpec by testSuite {
 
-    @Test
-    fun `Yay with Fun`() {
+    test("Yay with Fun") {
         assertEquals("A", "A")
     }
 
-    @Test
-    fun `Nay with Fun`() {
+    test("Nay with Fun") {
         assertNotEquals("A", "A")
     }
 }
