@@ -15,9 +15,9 @@ val tempDir = File(System.getProperty("java.io.tmpdir") + "/kotest-results")
 tempDir.deleteRecursively()
 tempDir.mkdirs()
 
+val targetDir = project.layout.buildDirectory.dir("test-results").get().asFile
 tasks.register("finalTask") {
     doLast {
-        val targetDir = project.layout.buildDirectory.dir("test-results").get().asFile
         if (targetDir.exists() && targetDir.isDirectory)
             File(targetDir.absolutePath + "/bolted-on").apply { mkdirs() }.let {
                 tempDir.copyRecursively(it, true)
