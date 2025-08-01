@@ -1,5 +1,6 @@
 package io.kotest.provided
 
+import io.kotest.common.platform
 import io.kotest.core.config.AbstractProjectConfig
 import io.kotest.core.extensions.Extension
 import io.kotest.core.listeners.AfterProjectListener
@@ -42,19 +43,21 @@ object Reporter : AfterTestListener, AfterProjectListener, AfterSpecListener {
 
     override suspend fun afterSpec(spec: Spec) {
         mutex.withLock {
-            val path = Path(tempPath)
-            SystemFileSystem.createDirectories(path)
-            val xml = collector.writeXml(spec, tests)
-            val sink = SystemFileSystem.sink(
-                Path(
-                    path,
-                    "TEST-" + Random.nextBytes(4).toHexString() + "-${spec::class.simpleName}.xml"
-                ), append = false
-            ).buffered()
-            sink.writeString(xml)
-            sink.flush()
-            sink.close()
-            tests.clear()
+            runCatching {
+                val path = Path(tempPath)
+                SystemFileSystem.createDirectories(path)
+                val xml = collector.writeXml(spec, tests)
+                val sink = SystemFileSystem.sink(
+                    Path(
+                        path,
+                        "${platform.name}-TEST-" + Random.nextBytes(4).toHexString() + "-${spec::class.simpleName}.xml"
+                    ), append = false
+                ).buffered()
+                sink.writeString(xml)
+                sink.flush()
+                sink.close()
+                tests.clear()
+            }.getOrElse { it.printStackTrace() }
         }
     }
 }

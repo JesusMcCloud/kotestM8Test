@@ -10,6 +10,26 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+
+val tempDir = File(System.getProperty("java.io.tmpdir") + "/kotest-results")
+tempDir.deleteRecursively()
+tempDir.mkdirs()
+
+tasks.register("finalTask") {
+    doLast {
+        val targetDir = project.layout.buildDirectory.dir("test-results").get().asFile
+        if (targetDir.exists() && targetDir.isDirectory)
+            File(targetDir.absolutePath + "/bolted-on").apply { mkdirs() }.let {
+                tempDir.copyRecursively(it, true)
+            }
+    }
+}
+
+tasks.configureEach {
+    if (name != "finalTask") finalizedBy("finalTask")
+}
+
+
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -88,19 +108,12 @@ kotlin {
     }
 }
 
-val f = project.layout.buildDirectory.dir("test-results").get().dir("bolted-on").asFile.apply { mkdirs() }
 
 val file = File("${project.layout.projectDirectory}/src/commonTest/kotlin/tempdir.kt")
 
 file.createNewFile()
 file.writer().use {
-    it.write("val tempPath = \"${f.absolutePath}\"")
-}
-
-gradle.taskGraph.whenReady {
-    allTasks.forEach { task ->
-        task.finalizedBy("finalTask")
-    }
+    it.write("val tempPath = \"${tempDir.absolutePath}\"")
 }
 
 
