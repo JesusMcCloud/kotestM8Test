@@ -69,7 +69,7 @@ kotlin {
 
     js {
         nodejs()
-        browser { testTask { useKarma { useChromiumHeadless() } }}
+        browser { testTask { useKarma { useChromeHeadless() } }}
     }
 
     @OptIn(ExperimentalWasmDsl::class)
@@ -82,7 +82,7 @@ kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser {
-            testTask { useKarma { useChromiumHeadless() } }
+            testTask { useKarma { useChromeHeadless() } }
             val rootDirPath = project.rootDir.path
             val projectDirPath = project.projectDir.path
             commonWebpackConfig {
