@@ -1,130 +1,105 @@
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.kotest)
-    alias(libs.plugins.ksp)
+  alias(libs.plugins.kotlinMultiplatform)
+  alias(libs.plugins.androidLibrary)
+  alias(libs.plugins.kotest)
+  alias(libs.plugins.ksp)
 }
-
-
-val tempDir = File(System.getProperty("java.io.tmpdir") + "/kotest-results")
-tempDir.deleteRecursively()
-tempDir.mkdirs()
-
-val targetDir = project.layout.buildDirectory.dir("test-results").get().asFile
-tasks.register("finalTask") {
-    doLast {
-        if (targetDir.exists() && targetDir.isDirectory)
-            File(targetDir.absolutePath + "/bolted-on").apply { mkdirs() }.let {
-                tempDir.copyRecursively(it, true)
-            }
-    }
-}
-
-tasks.configureEach {
-    if (name != "finalTask") finalizedBy("finalTask")
-}
-
 
 kotlin {
-    androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+
+  compilerOptions {
+    apiVersion = KotlinVersion.KOTLIN_2_2
+    languageVersion = KotlinVersion.KOTLIN_2_2
+  }
+
+  androidTarget()
+
+  macosArm64()
+  macosX64()
+  iosX64()
+  iosArm64()
+  iosSimulatorArm64()
+  watchosDeviceArm64()
+  watchosSimulatorArm64()
+  watchosX64()
+  watchosArm32()
+  watchosArm64()
+  tvosSimulatorArm64()
+  tvosX64()
+  tvosArm64()
+
+//  androidNativeX64()
+//  androidNativeX86()
+//  androidNativeArm32()
+//  androidNativeArm64()
+
+  linuxX64()
+  linuxArm64()
+//  mingwX64()
+
+  jvm()
+
+  js {
+    nodejs()
+    browser()
+  }
+
+//  @OptIn(ExperimentalWasmDsl::class)
+//  wasmWasi {
+//    nodejs()
+//  }
+
+  @OptIn(ExperimentalWasmDsl::class)
+  wasmJs {
+    browser {
+      testTask { useKarma { useChromeHeadless() } }
+      val rootDirPath = project.rootDir.path
+      val projectDirPath = project.projectDir.path
+      commonWebpackConfig {
+        devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+          static = (static ?: mutableListOf()).apply {
+            // Serve sources to debug inside browser
+            add(rootDirPath)
+            add(projectDirPath)
+          }
         }
+      }
     }
+    nodejs()
+  }
 
-    macosArm64()
-    macosX64()
-    tvosArm64()
-    tvosX64()
-    tvosSimulatorArm64()
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-    watchosDeviceArm64()
-    watchosSimulatorArm64()
-    watchosX64()
-    watchosArm32()
-    watchosArm64()
-    tvosSimulatorArm64()
-    tvosX64()
-    tvosArm64()
-
-    androidNativeX64()
-    androidNativeX86()
-    androidNativeArm32()
-    androidNativeArm64()
-
-    linuxX64()
-    linuxArm64()
-    mingwX64()
-
-    jvm {
-        testRuns["test"].executionTask.configure {
-            useJUnitPlatform()
-        }
+  sourceSets {
+    commonTest {
+      dependencies {
+        implementation(libs.kotest.framework)
+        implementation(libs.kotest.assert)
+      }
     }
-
-    //stile borked with M8
-    //wasmWasi { nodejs() }
-
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        browser {
-            testTask { useKarma { useChromeHeadless() } }
-            val rootDirPath = project.rootDir.path
-            val projectDirPath = project.projectDir.path
-            commonWebpackConfig {
-                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    static = (static ?: mutableListOf()).apply {
-                        // Serve sources to debug inside browser
-                        add(rootDirPath)
-                        add(projectDirPath)
-                    }
-                }
-            }
-        }
-        nodejs()
+    jsMain {
+      dependencies {
+        api(kotlin("stdlib-js"))
+      }
     }
-
-    sourceSets {
-        commonMain.dependencies {
-            // put your Multiplatform dependencies here
-        }
-        commonTest.dependencies {
-            implementation(libs.kotest.framework)
-            implementation(libs.kotest.assert)
-            implementation(libs.kotest.reporter)
-            implementation(libs.kxio)
-        }
-        jvmTest.dependencies {
-            implementation(libs.kotest.junit)
-        }
+    wasmJsMain {
+      dependencies {
+        api(kotlin("stdlib-wasm-js"))
+      }
     }
+  }
 }
-
-
-val file = File("${project.layout.projectDirectory}/src/commonTest/kotlin/tempdir.kt")
-
-file.createNewFile()
-file.writer().use {
-    it.write("val tempPath = \"${tempDir.absolutePath}\"")
-}
-
 
 android {
-    namespace = "io.kotest.test.shared"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
+  namespace = "io.kotest.test.shared"
+  compileSdk = libs.versions.android.compileSdk.get().toInt()
+  compileOptions {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+  }
+  defaultConfig {
+    minSdk = libs.versions.android.minSdk.get().toInt()
+  }
 }
