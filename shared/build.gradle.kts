@@ -3,103 +3,129 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
-  alias(libs.plugins.kotlinMultiplatform)
-  alias(libs.plugins.androidLibrary)
-  alias(libs.plugins.kotest)
-  alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotest)
+    alias(libs.plugins.ksp)
 }
+
+
+// Blocked by KSP.
+tasks.configureEach {
+    val n = name
+    if (
+        n.startsWith("compileTestKotlinWasmWasi") || // compilation task
+        n.endsWith("WasmWasiTest")                   // execution task
+    ) {
+        enabled = false
+    }
+}
+configurations
+    .matching { it.name.endsWith("wasmWasiTestCompileClasspath") || it.name.endsWith("wasmWasiTestRuntimeClasspath") }
+    .configureEach {
+        exclude(
+            group  = "io.kotest",
+            module = "kotest-framework-engine-wasm-wasi"
+        )
+        exclude(
+            group  = "io.kotest",
+            module = "kotest-assertions-core-wasm-wasi"
+        )
+    }
 
 kotlin {
 
-  compilerOptions {
-    apiVersion = KotlinVersion.KOTLIN_2_2
-    languageVersion = KotlinVersion.KOTLIN_2_2
-  }
+    compilerOptions {
+        apiVersion = KotlinVersion.KOTLIN_2_2
+        languageVersion = KotlinVersion.KOTLIN_2_2
+    }
 
-  androidTarget()
+    androidTarget()
 
-  macosArm64()
-  macosX64()
-  iosX64()
-  iosArm64()
-  iosSimulatorArm64()
-  watchosDeviceArm64()
-  watchosSimulatorArm64()
-  watchosX64()
-  watchosArm32()
-  watchosArm64()
-  tvosSimulatorArm64()
-  tvosX64()
-  tvosArm64()
+    macosArm64()
+    macosX64()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+    watchosDeviceArm64()
+    watchosSimulatorArm64()
+    watchosX64()
+    watchosArm32()
+    watchosArm64()
+    tvosSimulatorArm64()
+    tvosX64()
+    tvosArm64()
 
-//  androidNativeX64()
-//  androidNativeX86()
-//  androidNativeArm32()
-//  androidNativeArm64()
+    androidNativeX64()
+    androidNativeX86()
+    androidNativeArm32()
+    androidNativeArm64()
 
-  linuxX64()
-  linuxArm64()
-//  mingwX64()
+    linuxX64()
+    linuxArm64()
+    mingwX64()
 
-  jvm()
+    jvm()
 
-  js {
-    nodejs()
-    browser()
-  }
+    js {
+        nodejs()
+        browser { testTask { useKarma { useChromiumHeadless() } }}
+    }
 
-//  @OptIn(ExperimentalWasmDsl::class)
-//  wasmWasi {
-//    nodejs()
-//  }
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmWasi {
+        nodejs()
+    }
 
-  @OptIn(ExperimentalWasmDsl::class)
-  wasmJs {
-    browser {
-      testTask { useKarma { useChromeHeadless() } }
-      val rootDirPath = project.rootDir.path
-      val projectDirPath = project.projectDir.path
-      commonWebpackConfig {
-        devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-          static = (static ?: mutableListOf()).apply {
-            // Serve sources to debug inside browser
-            add(rootDirPath)
-            add(projectDirPath)
-          }
+
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser {
+            testTask { useKarma { useChromiumHeadless() } }
+            val rootDirPath = project.rootDir.path
+            val projectDirPath = project.projectDir.path
+            commonWebpackConfig {
+                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+                    static = (static ?: mutableListOf()).apply {
+                        // Serve sources to debug inside browser
+                        add(rootDirPath)
+                        add(projectDirPath)
+                    }
+                }
+            }
         }
-      }
+        nodejs()
     }
-    nodejs()
-  }
 
-  sourceSets {
-    commonTest {
-      dependencies {
-        implementation(libs.kotest.framework)
-        implementation(libs.kotest.assert)
-      }
+    sourceSets {
+        commonTest {
+            dependencies {
+                implementation(libs.kotest.framework)
+                implementation(libs.kotest.assert)
+            }
+        }
+        jsMain {
+            dependencies {
+                api(kotlin("stdlib-js"))
+            }
+        }
+        wasmJsMain {
+            dependencies {
+                api(kotlin("stdlib-wasm-js"))
+            }
+        }
     }
-    jsMain {
-      dependencies {
-        api(kotlin("stdlib-js"))
-      }
-    }
-    wasmJsMain {
-      dependencies {
-        api(kotlin("stdlib-wasm-js"))
-      }
-    }
-  }
 }
 
 android {
-  namespace = "io.kotest.test.shared"
-  compileSdk = libs.versions.android.compileSdk.get().toInt()
-  compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-  }
-  defaultConfig {
-    minSdk = libs.versions.android.minSdk.get().toInt()
-  }
+    namespace = "io.kotest.test.shared"
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    defaultConfig {
+        minSdk = libs.versions.android.minSdk.get().toInt()
+    }
 }
