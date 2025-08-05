@@ -63,13 +63,13 @@ jobs:
       - name: Run watchosSimulatorArm64Kotest
         run: ./gradlew watchosSimulatorArm64Kotest
         continue-on-error: true
-      - name: Run androidNativeX64Kotest
+      - name: Run androidNativeX86Kotest
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 30
-          arch: x86_64
+          arch: x86
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: ./gradlew androidNativeX64Kotest
+          script: ./gradlew androidNativeX86Kotest
         continue-on-error: true
       - name: Check
         run: ./gradlew check
