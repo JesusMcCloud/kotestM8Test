@@ -14,57 +14,56 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - name: Run tests
-        run: ./gradlew wasmJsTest
+        run: ./gradlew wasmJsKotest
         continue-on-error: true
       - name: Run tests
-        run: ./gradlew watchosSimulatorArm64Test
+        run: ./gradlew watchosSimulatorArm64Kotest
         continue-on-error: true
       - name: Run tests
-        run: ./gradlew iosSimulatorArm64Test
+        run: ./gradlew iosSimulatorArm64Kotest
         continue-on-error: true
       - name: Run tests
-        run: ./gradlew wasmJsNodeTest
+        run: ./gradlew wasmJsNodeKotest
         continue-on-error: true
       - name: Run tests
-        run: ./gradlew wasmJsBrowserTest
+        run: ./gradlew jsNodeKotest
         continue-on-error: true
       - name: Run tests
-        run: ./gradlew tvosX64Test
+        run: ./gradlew tvosX64Kotest
         continue-on-error: true
       - name: Run tests
-        run: ./gradlew tvosSimulatorArm64Test
+        run: ./gradlew tvosSimulatorArm64Kotest
         continue-on-error: true
       - name: Run tests
-        run: ./gradlew testReleaseUnitTest
+        run: ./gradlew kotestReleaseUnitTest
         continue-on-error: true
       - name: Run tests
-        run: ./gradlew testDebugUnitTest
+        run: ./gradlew kotestDebugUnitTest
         continue-on-error: true
       - name: Run tests
-        run: ./gradlew mingwX64Test
+        run: ./gradlew mingwX64Kotest
         continue-on-error: true
       - name: Run tests
-        run: ./gradlew macosX64Test
+        run: ./gradlew macosX64Kotest
         continue-on-error: true
       - name: Run tests
-        run: ./gradlew macosArm64Test
+        run: ./gradlew macosArm64Kotest
         continue-on-error: true
       - name: Run tests
-        run: ./gradlew linuxX64Test
+        run: ./gradlew linuxX64Kotest
         continue-on-error: true
       - name: Run tests
-        run: ./gradlew iosX64Test
+        run: ./gradlew iosX64Kotest
         continue-on-error: true
       - name: Run tests
-        run: ./gradlew jvmTest
+        run: ./gradlew jvmKotest
         continue-on-error: true
-      - name: Run tests
-        run: ./gradlew allTests
-        continue-on-error: true
+      - name: Check
+        run: ./gradlew check
       - name: List reports
-        run: ls -la shared/build/test-results/bolted-on
+        run: ls -laR shared/build/test-results/
         if: success() || failure()
-      - name: Test Report
+      - name: Kotest Report
         uses: dorny/test-reporter@v2
         if: success() || failure()
         with:
