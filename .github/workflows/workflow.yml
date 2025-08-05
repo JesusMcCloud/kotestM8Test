@@ -13,50 +13,44 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Run tests
-        run: ./gradlew wasmJsKotest
-        continue-on-error: true
-      - name: Run tests
-        run: ./gradlew watchosSimulatorArm64Kotest
-        continue-on-error: true
-      - name: Run tests
+      - name: Run iosSimulatorArm64Kotest
         run: ./gradlew iosSimulatorArm64Kotest
         continue-on-error: true
-      - name: Run tests
-        run: ./gradlew wasmJsNodeKotest
-        continue-on-error: true
-      - name: Run tests
+      - name: Run jsNodeKotest
         run: ./gradlew jsNodeKotest
         continue-on-error: true
-      - name: Run tests
-        run: ./gradlew tvosX64Kotest
+      - name: Run jvmKotest
+        run: ./gradlew jvmKotest
         continue-on-error: true
-      - name: Run tests
-        run: ./gradlew tvosSimulatorArm64Kotest
-        continue-on-error: true
-      - name: Run tests
-        run: ./gradlew kotestReleaseUnitTest
-        continue-on-error: true
-      - name: Run tests
+      - name: Run kotestDebugUnitTest
         run: ./gradlew kotestDebugUnitTest
         continue-on-error: true
-      - name: Run tests
-        run: ./gradlew mingwX64Kotest
+      - name: Run kotestReleaseUnitTest
+        run: ./gradlew kotestReleaseUnitTest
         continue-on-error: true
-      - name: Run tests
-        run: ./gradlew macosX64Kotest
+      - name: Run linuxArm64Kotest
+        run: ./gradlew linuxArm64Kotest
         continue-on-error: true
-      - name: Run tests
-        run: ./gradlew macosArm64Kotest
-        continue-on-error: true
-      - name: Run tests
+      - name: Run linuxX64Kotest
         run: ./gradlew linuxX64Kotest
         continue-on-error: true
-      - name: Run tests
-        run: ./gradlew iosX64Kotest
+      - name: Run macosArm64Kotest
+        run: ./gradlew macosArm64Kotest
         continue-on-error: true
-      - name: Run tests
-        run: ./gradlew jvmKotest
+      - name: Run macosX64Kotest
+        run: ./gradlew macosX64Kotest
+        continue-on-error: true
+      - name: Run mingwX64Kotest
+        run: ./gradlew mingwX64Kotest
+        continue-on-error: true
+      - name: Run tvosSimulatorArm64Kotest
+        run: ./gradlew tvosSimulatorArm64Kotest
+        continue-on-error: true
+      - name: Run wasmJsNodeKotest
+        run: ./gradlew wasmJsNodeKotest
+        continue-on-error: true
+      - name: Run watchosSimulatorArm64Kotest
+        run: ./gradlew watchosSimulatorArm64Kotest
         continue-on-error: true
       - name: Check
         run: ./gradlew check

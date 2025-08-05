@@ -1,9 +1,9 @@
-name: Test Everything on Linux
+name: Test Everything on Windows
 on:
   workflow_dispatch:
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -13,55 +13,50 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Enable aarch64 emulation
-        run: |
-          sudo apt-get update
-          sudo apt-get install --no-install-recommends -y qemu-user-static binfmt-support
-          sudo update-binfmt --enable qemu-aarch64
-        continue-on-error: true
       - name: Run iosSimulatorArm64Kotest
-        run: ./gradlew iosSimulatorArm64Kotest
+        run: .\gradlew.bat iosSimulatorArm64Kotest
         continue-on-error: true
       - name: Run jsNodeKotest
-        run: ./gradlew jsNodeKotest
+        run: .\gradlew.bat jsNodeKotest
         continue-on-error: true
       - name: Run jvmKotest
-        run: ./gradlew jvmKotest
+        run: .\gradlew.bat jvmKotest
         continue-on-error: true
       - name: Run kotestDebugUnitTest
-        run: ./gradlew kotestDebugUnitTest
+        run: .\gradlew.bat kotestDebugUnitTest
         continue-on-error: true
       - name: Run kotestReleaseUnitTest
-        run: ./gradlew kotestReleaseUnitTest
+        run: .\gradlew.bat kotestReleaseUnitTest
         continue-on-error: true
       - name: Run linuxArm64Kotest
-        run: ./gradlew linuxArm64Kotest
+        run: .\gradlew.bat linuxArm64Kotest
         continue-on-error: true
       - name: Run linuxX64Kotest
-        run: ./gradlew linuxX64Kotest
+        run: .\gradlew.bat linuxX64Kotest
         continue-on-error: true
       - name: Run macosArm64Kotest
-        run: ./gradlew macosArm64Kotest
+        run: .\gradlew.bat macosArm64Kotest
         continue-on-error: true
       - name: Run macosX64Kotest
-        run: ./gradlew macosX64Kotest
+        run: .\gradlew.bat macosX64Kotest
         continue-on-error: true
       - name: Run mingwX64Kotest
-        run: ./gradlew mingwX64Kotest
+        run: .\gradlew.bat mingwX64Kotest
         continue-on-error: true
       - name: Run tvosSimulatorArm64Kotest
-        run: ./gradlew tvosSimulatorArm64Kotest
+        run: .\gradlew.bat tvosSimulatorArm64Kotest
         continue-on-error: true
       - name: Run wasmJsNodeKotest
-        run: ./gradlew wasmJsNodeKotest
+        run: .\gradlew.bat wasmJsNodeKotest
         continue-on-error: true
       - name: Run watchosSimulatorArm64Kotest
-        run: ./gradlew watchosSimulatorArm64Kotest
+        run: .\gradlew.bat watchosSimulatorArm64Kotest
         continue-on-error: true
       - name: Check
-        run: ./gradlew check
+        run: .\gradlew.bat check
       - name: List reports
-        run: ls -laR shared/build/test-results/
+        shell: cmd
+        run: dir shared\build\test-results /s /a
         if: success() || failure()
       - name: Kotest Report
         uses: dorny/test-reporter@v2
