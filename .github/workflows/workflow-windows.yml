@@ -1,6 +1,5 @@
-name: Test Everything on Windows
-on:
-  workflow_dispatch:
+name: Kotest Everything on Windows
+on: [push]
 jobs:
   build:
     runs-on: windows-latest
@@ -13,8 +12,8 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Run iosSimulatorArm64Kotest
-        run: .\gradlew.bat iosSimulatorArm64Kotest
+      - name: Run iosSimulatorArm64Test
+        run: .\gradlew.bat iosSimulatorArm64Test
         continue-on-error: true
       - name: Run jsNodeKotest
         run: .\gradlew.bat jsNodeKotest
@@ -28,29 +27,29 @@ jobs:
       - name: Run kotestReleaseUnitTest
         run: .\gradlew.bat kotestReleaseUnitTest
         continue-on-error: true
-      - name: Run linuxArm64Kotest
-        run: .\gradlew.bat linuxArm64Kotest
+      - name: Run linuxArm64Test
+        run: .\gradlew.bat linuxArm64Test
         continue-on-error: true
-      - name: Run linuxX64Kotest
-        run: .\gradlew.bat linuxX64Kotest
+      - name: Run linuxX64Test
+        run: .\gradlew.bat linuxX64Test
         continue-on-error: true
-      - name: Run macosArm64Kotest
-        run: .\gradlew.bat macosArm64Kotest
+      - name: Run macosArm64Test
+        run: .\gradlew.bat macosArm64Test
         continue-on-error: true
-      - name: Run macosX64Kotest
-        run: .\gradlew.bat macosX64Kotest
+      - name: Run macosX64Test
+        run: .\gradlew.bat macosX64Test
         continue-on-error: true
-      - name: Run mingwX64Kotest
-        run: .\gradlew.bat mingwX64Kotest
+      - name: Run mingwX64Test
+        run: .\gradlew.bat mingwX64Test
         continue-on-error: true
-      - name: Run tvosSimulatorArm64Kotest
-        run: .\gradlew.bat tvosSimulatorArm64Kotest
+      - name: Run tvosSimulatorArm64Test
+        run: .\gradlew.bat tvosSimulatorArm64Test
         continue-on-error: true
       - name: Run wasmJsNodeKotest
         run: .\gradlew.bat wasmJsNodeKotest
         continue-on-error: true
-      - name: Run watchosSimulatorArm64Kotest
-        run: .\gradlew.bat watchosSimulatorArm64Kotest
+      - name: Run watchosSimulatorArm64Test
+        run: .\gradlew.bat watchosSimulatorArm64Test
         continue-on-error: true
       - name: Check
         run: .\gradlew.bat check
@@ -63,6 +62,6 @@ jobs:
         if: success() || failure()
         with:
           name: All Tests
-          path: shared/build/test-results/**/TEST*.xml
+          path: build/test-results/**/TEST*.xml
           reporter: java-junit
           use-actions-summary: true

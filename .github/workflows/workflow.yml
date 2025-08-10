@@ -1,6 +1,5 @@
 name: Kotest Everything on macOS
-on:
-  workflow_dispatch:
+on: [push]
 jobs:
   build:
     runs-on: macos-latest
@@ -15,8 +14,8 @@ jobs:
           java-version: '17'
       - run: sudo xcodebuild -license accept
       - run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
-      - name: Run iosSimulatorArm64Kotest
-        run: ./gradlew iosSimulatorArm64Kotest
+      - name: Run iosSimulatorArm64Test
+        run: ./gradlew iosSimulatorArm64Test
         continue-on-error: true
       - name: Run jsNodeKotest
         run: ./gradlew jsNodeKotest
@@ -30,38 +29,38 @@ jobs:
       - name: Run kotestReleaseUnitTest
         run: ./gradlew kotestReleaseUnitTest
         continue-on-error: true
-      - name: Run linuxArm64Kotest
-        run: ./gradlew linuxArm64Kotest
+      - name: Run linuxArm64Test
+        run: ./gradlew linuxArm64Test
         continue-on-error: true
-      - name: Run linuxX64Kotest
-        run: ./gradlew linuxX64Kotest
+      - name: Run linuxX64Test
+        run: ./gradlew linuxX64TestK
         continue-on-error: true
-      - name: Run macosArm64Kotest
-        run: ./gradlew macosArm64Kotest
+      - name: Run macosArm64Test
+        run: ./gradlew macosArm64Test
         continue-on-error: true
-      - name: Run macosX64Kotest
-        run: ./gradlew macosX64Kotest
+      - name: Run macosX64Test
+        run: ./gradlew macosX64Test
         continue-on-error: true
-      - name: Run mingwX64Kotest
-        run: ./gradlew mingwX64Kotest
+      - name: Run mingwX64Test
+        run: ./gradlew mingwX64Test
         continue-on-error: true
-      - name: Run tvosSimulatorArm64Kotest
-        run: ./gradlew tvosSimulatorArm64Kotest
+      - name: Run tvosSimulatorArm64Test
+        run: ./gradlew tvosSimulatorArm64Test
         continue-on-error: true
       - name: Run wasmJsNodeKotest
         run: ./gradlew wasmJsNodeKotest
         continue-on-error: true
-      - name: Run watchosSimulatorArm64Kotest
-        run: ./gradlew watchosSimulatorArm64Kotest
+      - name: Run watchosSimulatorArm64Test
+        run: ./gradlew watchosSimulatorArm64Test
         continue-on-error: true
 
-      - name: Run androidNativeX86Kotest
+      - name: Run androidNativeX86Test
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 30
           arch: x86
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: ./gradlew androidNativeX86Kotest
+          script: ./gradlew androidNativeX86Test
         continue-on-error: true
 
       - name: Check
@@ -74,6 +73,6 @@ jobs:
         if: success() || failure()
         with:
           name: All Tests
-          path: shared/build/test-results/**/TEST*.xml
+          path: build/test-results/**/TEST*.xml
           reporter: java-junit
           use-actions-summary: true
