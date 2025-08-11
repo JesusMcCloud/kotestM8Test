@@ -121,7 +121,6 @@ kotlin {
             dependencies {
                 implementation(libs.kotest.framework)
                 implementation(libs.kotest.assert)
-                implementation(kotlin("test"))
             }
         }
         // these deps should be added by gradle automatically from common main, but they don't seem to always work
