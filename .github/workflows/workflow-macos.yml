@@ -1,4 +1,4 @@
-name: Kotest Linux Targets
+name: Kotest Macos Targets
 on: [ push ]
 jobs:
   build:
