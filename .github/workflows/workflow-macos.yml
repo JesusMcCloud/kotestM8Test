@@ -1,14 +1,13 @@
-name: Kotest Everything on macOS
-on: [push]
+name: Kotest Linux Targets
+on: [ push ]
 jobs:
   build:
     runs-on: macos-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -16,6 +15,12 @@ jobs:
       - run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
       - name: Run iosSimulatorArm64Test
         run: ./gradlew iosSimulatorArm64Test
+        continue-on-error: true
+      - name: Run iosX64Test
+        run: ./gradlew iosX64Test
+        continue-on-error: true
+      - name: Run iosArm64Test
+        run: ./gradlew iosArm64Test
         continue-on-error: true
       - name: Run jsNodeKotest
         run: ./gradlew jsNodeKotest
@@ -29,23 +34,20 @@ jobs:
       - name: Run kotestReleaseUnitTest
         run: ./gradlew kotestReleaseUnitTest
         continue-on-error: true
-      - name: Run linuxArm64Test
-        run: ./gradlew linuxArm64Test
-        continue-on-error: true
-      - name: Run linuxX64Test
-        run: ./gradlew linuxX64TestK
-        continue-on-error: true
       - name: Run macosArm64Test
         run: ./gradlew macosArm64Test
         continue-on-error: true
       - name: Run macosX64Test
         run: ./gradlew macosX64Test
         continue-on-error: true
-      - name: Run mingwX64Test
-        run: ./gradlew mingwX64Test
-        continue-on-error: true
       - name: Run tvosSimulatorArm64Test
         run: ./gradlew tvosSimulatorArm64Test
+        continue-on-error: true
+      - name: Run tvosX64Test
+        run: ./gradlew tvosX64Test
+        continue-on-error: true
+      - name: Run tvosArm64Test
+        run: ./gradlew tvosArm64Test
         continue-on-error: true
       - name: Run wasmJsNodeKotest
         run: ./gradlew wasmJsNodeKotest
@@ -53,7 +55,12 @@ jobs:
       - name: Run watchosSimulatorArm64Test
         run: ./gradlew watchosSimulatorArm64Test
         continue-on-error: true
-
+      - name: Run watchosX64Test
+        run: ./gradlew watchosX64Test
+        continue-on-error: true
+      - name: Run watchosArm64Test
+        run: ./gradlew watchosArm64Test
+        continue-on-error: true
       - name: Run androidNativeX86Test
         uses: reactivecircus/android-emulator-runner@v2
         with:
