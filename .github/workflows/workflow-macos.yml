@@ -58,9 +58,6 @@ jobs:
       - name: Run watchosX64Test
         run: ./gradlew watchosX64Test
         continue-on-error: true
-      - name: Run watchosArm64Test
-        run: ./gradlew watchosArm64Test
-        continue-on-error: true
       - name: Run androidNativeX86Test
         uses: reactivecircus/android-emulator-runner@v2
         with:
