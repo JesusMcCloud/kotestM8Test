@@ -19,9 +19,6 @@ jobs:
       - name: Run iosX64Test
         run: ./gradlew iosX64Test
         continue-on-error: true
-      - name: Run iosArm64Test
-        run: ./gradlew iosArm64Test
-        continue-on-error: true
       - name: Run jsNodeKotest
         run: ./gradlew jsNodeKotest
         continue-on-error: true
@@ -45,9 +42,6 @@ jobs:
         continue-on-error: true
       - name: Run tvosX64Test
         run: ./gradlew tvosX64Test
-        continue-on-error: true
-      - name: Run tvosArm64Test
-        run: ./gradlew tvosArm64Test
         continue-on-error: true
       - name: Run wasmJsNodeKotest
         run: ./gradlew wasmJsNodeKotest
