@@ -22,28 +22,28 @@ jobs:
           sudo apt-get install --no-install-recommends -y qemu-user-static binfmt-support
           sudo update-binfmt --enable qemu-aarch64
         continue-on-error: true
-      - name: Run jsNodeKotest
-        run: ./gradlew jsNodeKotest
+      - name: jsNodeTest
+        run: ./gradlew jsNodeTest
         continue-on-error: true
-      - name: Run jvmKotest
+      - name: jvmKotest
         run: ./gradlew jvmKotest
         continue-on-error: true
-      - name: Run kotestDebugUnitTest
+      - name: kotestDebugUnitTest
         run: ./gradlew kotestDebugUnitTest
         continue-on-error: true
-      - name: Run kotestReleaseUnitTest
+      - name: kotestReleaseUnitTest
         run: ./gradlew kotestReleaseUnitTest
         continue-on-error: true
-      - name: Run linuxArm64Test
+      - name: linuxArm64Test
         run: ./gradlew linuxArm64Test
         continue-on-error: true
-      - name: Run linuxX64Test
+      - name: linuxX64Test
         run: ./gradlew linuxX64Test
         continue-on-error: true
-      - name: Run wasmJsNodeKotest
-        run: ./gradlew wasmJsNodeKotest
+      - name: wasmJsNodeTest
+        run: ./gradlew wasmJsNodeTest
         continue-on-error: true
-      - name: Run androidNativeX86Test
+      - name: androidNativeX86Test
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 30

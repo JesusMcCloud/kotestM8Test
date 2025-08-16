@@ -11,22 +11,22 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Run jsNodeKotest
-        run: .\gradlew.bat jsNodeKotest
+      - name: jsNodeTest
+        run: .\gradlew.bat jsNodeTest
         continue-on-error: true
-      - name: Run jvmKotest
+      - name: jvmKotest
         run: .\gradlew.bat jvmKotest
         continue-on-error: true
-      - name: Run kotestDebugUnitTest
+      - name: kotestDebugUnitTest
         run: .\gradlew.bat kotestDebugUnitTest
         continue-on-error: true
-      - name: Run kotestReleaseUnitTest
+      - name: kotestReleaseUnitTest
         run: .\gradlew.bat kotestReleaseUnitTest
         continue-on-error: true
-      - name: Run mingwX64Test
+      - name: mingwX64Test
         run: .\gradlew.bat mingwX64Test
         continue-on-error: true
-      - name: Run wasmJsNodeKotest
+      - name: wasmJsNodeTest
         run: .\gradlew.bat wasmJsNodeKotest
         continue-on-error: true
       - name: List reports
