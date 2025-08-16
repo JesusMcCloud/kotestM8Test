@@ -13,46 +13,46 @@ jobs:
           java-version: '17'
       - run: sudo xcodebuild -license accept
       - run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
-      - name: Run iosSimulatorArm64Test
+      - name: iosSimulatorArm64Test
         run: ./gradlew iosSimulatorArm64Test
         continue-on-error: true
-      - name: Run iosX64Test
+      - name: iosX64Test
         run: ./gradlew iosX64Test
         continue-on-error: true
-      - name: Run jsNodeKotest
-        run: ./gradlew jsNodeKotest
+      - name: jsNodeTest
+        run: ./gradlew jsNodeTest
         continue-on-error: true
-      - name: Run jvmKotest
+      - name: jvmKotest
         run: ./gradlew jvmKotest
         continue-on-error: true
-      - name: Run kotestDebugUnitTest
+      - name: kotestDebugUnitTest
         run: ./gradlew kotestDebugUnitTest
         continue-on-error: true
-      - name: Run kotestReleaseUnitTest
+      - name: kotestReleaseUnitTest
         run: ./gradlew kotestReleaseUnitTest
         continue-on-error: true
-      - name: Run macosArm64Test
+      - name: macosArm64Test
         run: ./gradlew macosArm64Test
         continue-on-error: true
-      - name: Run macosX64Test
+      - name: macosX64Test
         run: ./gradlew macosX64Test
         continue-on-error: true
-      - name: Run tvosSimulatorArm64Test
+      - name: tvosSimulatorArm64Test
         run: ./gradlew tvosSimulatorArm64Test
         continue-on-error: true
-      - name: Run tvosX64Test
+      - name: tvosX64Test
         run: ./gradlew tvosX64Test
         continue-on-error: true
-      - name: Run wasmJsNodeKotest
-        run: ./gradlew wasmJsNodeKotest
+      - name: wasmJsNodeTest
+        run: ./gradlew wasmJsNodeTest
         continue-on-error: true
-      - name: Run watchosSimulatorArm64Test
+      - name: watchosSimulatorArm64Test
         run: ./gradlew watchosSimulatorArm64Test
         continue-on-error: true
-      - name: Run watchosX64Test
+      - name: watchosX64Test
         run: ./gradlew watchosX64Test
         continue-on-error: true
-      - name: Run androidNativeX86Test
+      - name: androidNativeX86Test
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 30
